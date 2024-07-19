@@ -1,0 +1,33 @@
+<!-- <p>This component will register user using auth-service /register API</p>
+<p>It will display a form to get user's username and password</p>
+<p>After successfull reg it will provide a modal and tell user to login</p> -->
+
+<div [hidden]="isRegisteredSuccessfull === true">
+    <form class="example-form" style="margin-top: -10%;">
+        <h2>Please fill the form to Register</h2>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Enter valid email address</mat-label>
+            <input type="email" matInput [formControl]="emailFormControl" [errorStateMatcher]="matcher"
+                placeholder="Ex. pat@example.com" name="email">
+            @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {
+            <mat-error>Please enter a valid email address</mat-error>
+            }
+            @if (emailFormControl.hasError('required')) {
+            <mat-error>Email is <strong>required</strong></mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" style="margin-top: 3%;">
+            <mat-label>Enter password</mat-label>
+            <input type="password" matInput placeholder="Enter password" [(ngModel)]="password" name="password" />
+        </mat-form-field>
+
+        <button type="submit" style="color: white; background-color: blue" mat-flat-button class="submitButton"
+            (click)="registerUser()">Register</button>
+    </form>
+</div>
+
+<div [hidden]="isRegisteredSuccessfull === false">
+ You have successfully Registered. Please log in
+</div>

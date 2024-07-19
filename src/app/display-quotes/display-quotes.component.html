@@ -1,0 +1,27 @@
+<!-- <p>This component will fetch and display quotes</p>
+<p>It will be disabled if user is not logged in</p> -->
+
+<div [hidden]="showQuote === true">
+
+    <h4>Select Quote Category</h4>
+    <mat-form-field>
+        <mat-label>Quote Categories</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" name="selectedCategory">
+            @for (quoteCategory of quotesCategories; track quoteCategory) {
+            <mat-option [value]="quoteCategory">{{quoteCategory}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <br />
+
+    <button type="submit" style="color: white; background-color: blue" mat-flat-button class="submitButton"
+        (click)="fetchQuoteForCategory()">Display Quote</button>
+
+</div>
+
+<div [hidden]="showQuote === false">
+    <h2>{{quoteToDisplay.author}}</h2>
+    <h3>{{quoteToDisplay.quote}}</h3>
+    <h3>{{quoteToDisplay.category}}</h3>
+</div>
