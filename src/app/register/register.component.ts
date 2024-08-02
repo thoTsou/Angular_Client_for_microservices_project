@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RegisterService } from '../register.service';
 import { AuthRequest } from '../AuthRequest';
 import { FormControl, Validators } from '@angular/forms';
 import { EmailErrorStateMatcher } from '../login/EmailErrorStateMatcher';
+import { LoginService } from '../login.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
+
+  isUserLoggedIn = false;
 
   isRegisteredSuccessfull = false;
 
@@ -19,7 +22,15 @@ export class RegisterComponent {
 
   matcher = new EmailErrorStateMatcher();
 
-  constructor(private registerService: RegisterService) { }
+  constructor(private registerService: RegisterService, private loginService: LoginService) { }
+
+  ngOnInit(): void {
+    this.loginService.tryRefreshAccessJWT().subscribe(apiResponse => {
+      if (apiResponse.httpStatusCode == 200 && apiResponse.accessToken.length !== 0) {
+        this.isUserLoggedIn = true;
+      }
+    })
+  }
 
   registerUser(): void {
     console.log("startingRegistering")

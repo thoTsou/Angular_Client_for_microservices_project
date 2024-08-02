@@ -15,7 +15,8 @@ export class QuotesService {
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
-    })
+    }),
+    withCredentials: true
   };
 
   constructor(private loginService: LoginService, private httpClient: HttpClient) { }

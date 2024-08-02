@@ -14,19 +14,31 @@ export class LoginService {
   private LOGIN_API_URL = 'http://localhost:8080/auth-service/login';
 
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    }),
+    withCredentials: true
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
-  public loginUser(authRequest: AuthRequest): Observable<LoginApiResponse> {
-    return this.http.post<LoginApiResponse>(this.LOGIN_API_URL, authRequest, this.httpOptions).pipe(
-      tap((apiResponse: LoginApiResponse) => {
-        if (apiResponse.httpStatusCode == 200 && apiResponse.accessToken.length !== 0) {
-          this.ACCESS_TOKEN = apiResponse.accessToken;
-        }
-      })
+  loginUser(authRequest: AuthRequest): Observable<LoginApiResponse> {
+    return this.httpClient.post<LoginApiResponse>(this.LOGIN_API_URL, authRequest, this.httpOptions).pipe(
+      tap((apiResponse: LoginApiResponse) => this.trySetAccessJWT(apiResponse))
     )
+  }
+
+  tryRefreshAccessJWT(): Observable<LoginApiResponse> {
+    return this.httpClient.post<LoginApiResponse>(this.LOGIN_API_URL, new  AuthRequest("_", "_"),this.httpOptions).pipe(
+      tap((apiResponse: LoginApiResponse) => this.trySetAccessJWT(apiResponse))
+    )
+  }
+
+
+  private trySetAccessJWT(apiResponse: LoginApiResponse) {
+    if (apiResponse.httpStatusCode == 200 && apiResponse.accessToken.length !== 0) {
+      this.ACCESS_TOKEN = apiResponse.accessToken;
+    }
   }
 
 }

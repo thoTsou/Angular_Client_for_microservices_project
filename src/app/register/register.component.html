@@ -2,7 +2,7 @@
 <p>It will display a form to get user's username and password</p>
 <p>After successfull reg it will provide a modal and tell user to login</p> -->
 
-<div [hidden]="isRegisteredSuccessfull === true">
+<div [hidden]="isRegisteredSuccessfull === true || isUserLoggedIn === true">
     <form class="example-form" style="margin-top: -10%;">
         <h2>Please fill the form to Register</h2>
 
@@ -29,5 +29,11 @@
 </div>
 
 <div [hidden]="isRegisteredSuccessfull === false">
- You have successfully Registered. Please log in
+    You have successfully Registered. Please log in
+</div>
+
+<div [hidden]="isUserLoggedIn === false">
+    <h1>App logged you In by fetching a new access JWT using the refresh JWT stored in a httpOnly Cookie received from server !!</h1>
+
+    <app-display-quotes [fetchCategories]="isUserLoggedIn"></app-display-quotes>
 </div>
